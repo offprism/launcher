@@ -52,7 +52,8 @@ void NewsChecker::reloadNews()
         return;
     }
 
-    m_entry = APPLICATION->metacache()->resolveEntry("feed", "feed.xml");
+    // OffPrism: own cache key, so a cached Prism Launcher feed from older versions is never shown
+    m_entry = APPLICATION->metacache()->resolveEntry("feed", "offprism-feed.xml");
 
     qDebug() << "Reloading news.";
 
