@@ -62,6 +62,8 @@ class Config {
     int VERSION_MINOR;
     /// The patch version number.
     int VERSION_PATCH;
+    /// Human readable release name, e.g. "Piano"
+    QString VERSION_CODENAME;
 
     /**
      * The version channel
@@ -206,6 +208,9 @@ class Config {
      * \return The version number in string format (major.minor.revision.build).
      */
     QString printableVersionString() const;
+
+    /// Version as shown to the user, e.g. "Piano v1.0.0"
+    QString displayVersionString() const;
 
     /**
      * \brief Compiler ID String

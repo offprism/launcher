@@ -99,6 +99,14 @@ MinecraftAccountPtr MinecraftAccount::createElyBy(const QString& login, const QS
     return account;
 }
 
+MinecraftAccountPtr MinecraftAccount::createAuthlibInjector(const QString& server, const QString& login, const QString& password)
+{
+    auto account = createElyBy(login, password);
+    account->data.type = AccountType::AuthlibInjector;
+    account->data.yggdrasilToken.extra["server"] = server;
+    return account;
+}
+
 QJsonObject MinecraftAccount::saveToJson() const
 {
     return data.saveState();
@@ -261,9 +269,7 @@ void MinecraftAccount::fillSession(AuthSessionPtr session)
         session->uuid = uuidFromUsername(session->player_name).toString(QUuid::Id128);
     // 'legacy' or 'mojang', depending on account type
     session->user_type = typeString();
-    if (data.type == AccountType::ElyBy) {
-        session->authlib_injector_server = "ely.by";
-    }
+    session->authlib_injector_server = data.authlibServer();
     if (!session->access_token.isEmpty()) {
         session->session = "token:" + data.accessToken() + ":" + data.profileId();
     } else {

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>@Launcher_AppID@</id>
-  <name>Prism Launcher</name>
+  <name>OffPrism</name>
   <summary>Custom Minecraft Launcher to easily manage multiple Minecraft installations at once</summary>
-  <developer id="org.prismlauncher">
-    <name>Prism Launcher Contributors</name>
+  <developer id="org.offprism">
+    <name>OffPrism and Prism Launcher Contributors</name>
   </developer>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <description>
-    <p>Prism Launcher is a custom launcher for Minecraft that focuses on predictability, long term stability and simplicity.</p>
+    <p>OffPrism is a fork of Prism Launcher with offline, Ely.by and authlib-injector accounts. It is a custom launcher for Minecraft that focuses on predictability, long term stability and simplicity.</p>
     <p>Features:</p>
     <ul>
       <li>Easily install game modifications, such as Fabric, Forge and Quilt</li>
@@ -26,7 +26,7 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <caption>The main Prism Launcher window</caption>
+      <caption>The main launcher window</caption>
       <image type="source" width="1030" height="764">https://prismlauncher.org/img/screenshots/LauncherDark.png</image>
     </screenshot>
     <screenshot>
@@ -61,8 +61,8 @@
   <releases>
     <release version="@Launcher_VERSION_NAME@" date="@Launcher_BUILD_TIMESTAMP@"></release>
   </releases>
-  <url type="homepage">https://prismlauncher.org/</url>
-  <url type="bugtracker">https://github.com/PrismLauncher/PrismLauncher/issues</url>
+  <url type="homepage">https://github.com/offprism/launcher</url>
+  <url type="bugtracker">https://github.com/offprism/launcher/issues</url>
   <url type="faq">https://prismlauncher.org/wiki/overview/faq/</url>
   <url type="help">https://prismlauncher.org/wiki/</url>
   <url type="donation">https://opencollective.com/prismlauncher</url>

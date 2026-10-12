@@ -150,6 +150,17 @@ void AccountListPage::on_actionAddElyBy_triggered()
     }
 }
 
+void AccountListPage::on_actionAddAuthlib_triggered()
+{
+    auto account = ElyByLoginDialog::newAuthlibAccount(this);
+    if (account) {
+        m_accounts->addAccount(account);
+        if (m_accounts->count() == 1) {
+            m_accounts->setDefaultAccount(account);
+        }
+    }
+}
+
 void AccountListPage::on_actionAddOffline_triggered()
 {
     ChooseOfflineNameDialog dialog(tr("Please enter your desired username to add your offline account."), this);

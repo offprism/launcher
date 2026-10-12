@@ -1,3 +1,16 @@
+## OffPrism
+
+     OffPrism - Minecraft Launcher (fork of Prism Launcher)
+     Copyright (C) 2026 OffPrism Contributors
+
+     Licensed under the GNU General Public License, version 3, like Prism Launcher below.
+
+## authlib-injector
+
+     libraries/authlib-injector/authlib-injector.jar is an unmodified build of
+     authlib-injector (https://github.com/yushijinhun/authlib-injector),
+     licensed under the GNU Affero General Public License v3.0.
+
 ## Prism Launcher
 
      Prism Launcher - Minecraft Launcher

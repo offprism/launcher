@@ -88,7 +88,7 @@ struct MinecraftProfile {
     Validity validity = Validity::None;
 };
 
-enum class AccountType { MSA, Offline, ElyBy };
+enum class AccountType { MSA, Offline, ElyBy, AuthlibInjector };
 
 enum class AccountState { Unchecked, Offline, Working, Online, Disabled, Errored, Expired, Gone };
 
@@ -103,6 +103,9 @@ struct AccountData {
     QString profileName() const;
 
     QString lastError() const;
+
+    //! authlib-injector API root (for Ely.by and authlib-injector accounts), empty otherwise
+    QString authlibServer() const;
 
     AccountType type = AccountType::MSA;
 

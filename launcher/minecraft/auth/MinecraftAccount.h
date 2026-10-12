@@ -89,6 +89,8 @@ class MinecraftAccount : public QObject, public Usable {
 
     static MinecraftAccountPtr createElyBy(const QString& login, const QString& password);
 
+    static MinecraftAccountPtr createAuthlibInjector(const QString& server, const QString& login, const QString& password);
+
     static MinecraftAccountPtr loadFromJsonV3(const QJsonObject& json);
 
     static QUuid uuidFromUsername(QString username);
@@ -132,7 +134,8 @@ class MinecraftAccount : public QObject, public Usable {
             case AccountType::Offline: {
                 return "offline";
             } break;
-            case AccountType::ElyBy: {
+            case AccountType::ElyBy:
+            case AccountType::AuthlibInjector: {
                 return "mojang";
             } break;
             default: {

@@ -7,15 +7,20 @@
 class QLineEdit;
 class QLabel;
 class QDialogButtonBox;
+class QNetworkReply;
 
+// Login dialog for Yggdrasil-compatible accounts: Ely.by and any authlib-injector server.
 class ElyByLoginDialog : public QDialog {
     Q_OBJECT
 
    public:
-    explicit ElyByLoginDialog(QWidget* parent = nullptr);
+    enum class Mode { ElyBy, AuthlibInjector };
+
+    explicit ElyByLoginDialog(Mode mode, QWidget* parent = nullptr);
     ~ElyByLoginDialog() override = default;
 
     static MinecraftAccountPtr newAccount(QWidget* parent);
+    static MinecraftAccountPtr newAuthlibAccount(QWidget* parent, const QString& server = {});
 
    private slots:
     void onLogin();
@@ -24,7 +29,12 @@ class ElyByLoginDialog : public QDialog {
 
    private:
     void setBusy(bool busy);
+    void resolveServer(const QString& input);
+    void startLogin(const QString& server);
+    void fail(const QString& reason);
 
+    Mode m_mode;
+    QLineEdit* m_server = nullptr;
     QLineEdit* m_login = nullptr;
     QLineEdit* m_password = nullptr;
     QLineEdit* m_totp = nullptr;
@@ -33,4 +43,5 @@ class ElyByLoginDialog : public QDialog {
 
     MinecraftAccountPtr m_account;
     shared_qobject_ptr<AuthFlow> m_task;
+    QNetworkReply* m_resolveReply = nullptr;
 };

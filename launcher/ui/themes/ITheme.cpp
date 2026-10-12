@@ -38,13 +38,19 @@
 #include <QStyleFactory>
 #include "Application.h"
 #include "HintOverrideProxyStyle.h"
+#include "GlassTheme.h"
 #include "rainbow.h"
 
 void ITheme::apply(bool)
 {
+    GlassTheme::deactivate();
     APPLICATION->setStyleSheet(QString());
     QApplication::setStyle(new HintOverrideProxyStyle(QStyleFactory::create(qtTheme())));
     QApplication::setPalette(colorScheme());
+    if (GlassTheme::isActive() == false) {
+        // undo the per-class palettes the glass theme may have set
+        GlassTheme::setPopupPalette(colorScheme());
+    }
     APPLICATION->setStyleSheet(appStyleSheet());
     QDir::setSearchPaths("theme", searchPaths());
 }

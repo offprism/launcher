@@ -225,8 +225,10 @@ set(MINECRAFT_SOURCES
     minecraft/auth/steps/EntitlementsStep.h
     minecraft/auth/steps/GetSkinStep.cpp
     minecraft/auth/steps/GetSkinStep.h
-    minecraft/auth/steps/ElyByStep.cpp
-    minecraft/auth/steps/ElyByStep.h
+    minecraft/auth/steps/YggdrasilAuthStep.cpp
+    minecraft/auth/steps/YggdrasilAuthStep.h
+    minecraft/auth/steps/AuthlibProfileStep.cpp
+    minecraft/auth/steps/AuthlibProfileStep.h
     minecraft/auth/steps/LauncherLoginStep.cpp
     minecraft/auth/steps/LauncherLoginStep.h
     minecraft/auth/steps/MinecraftProfileStep.cpp
@@ -860,6 +862,8 @@ SET(LAUNCHER_SOURCES
     ui/themes/CustomTheme.h
     ui/themes/DarkTheme.cpp
     ui/themes/DarkTheme.h
+    ui/themes/GlassTheme.cpp
+    ui/themes/GlassTheme.h
     ui/themes/ITheme.cpp
     ui/themes/ITheme.h
     ui/themes/HintOverrideProxyStyle.cpp
@@ -1243,6 +1247,9 @@ if(${Launcher_USE_PCH})
     target_precompile_headers(Launcher_logic PRIVATE ${PRECOMPILED_HEADERS})
 endif()
 
+if(WIN32)
+    target_link_libraries(Launcher_logic dwmapi)
+endif()
 target_link_libraries(Launcher_logic
     Launcher_murmur2
     nbt++

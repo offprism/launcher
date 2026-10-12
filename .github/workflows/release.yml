@@ -13,9 +13,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     permissions:
       contents: read
-      # Required for Azure Trusted Signing
       id-token: write
-      # Required for vcpkg binary cache
       packages: write
     with:
       build-type: Release
@@ -26,87 +24,103 @@ jobs:
     needs: build_release
     permissions:
       contents: write
-    runs-on: ubuntu-slim
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           submodules: "true"
-          path: "PrismLauncher-source"
+          path: "OffPrism-source"
+
       - name: Download artifacts
         uses: actions/download-artifact@v8
+
       - name: Grab and store version
         run: |
           tag_name=$(echo ${{ github.ref }} | grep -oE "[^/]+$")
           echo "VERSION=$tag_name" >> $GITHUB_ENV
+          codename=$(grep -oP 'set\(Launcher_VERSION_CODENAME "\K[^"]+' OffPrism-source/CMakeLists.txt || true)
+          echo "CODENAME=$codename" >> $GITHUB_ENV
+
       - name: Package artifacts properly
         run: |
-          mv ${{ github.workspace }}/PrismLauncher-source PrismLauncher-${{ env.VERSION }}
-          mv PrismLauncher-Linux-Qt6-Portable*/PrismLauncher-portable.tar.gz PrismLauncher-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
-          mv PrismLauncher-Linux-aarch64-Qt6-Portable*/PrismLauncher-portable.tar.gz PrismLauncher-Linux-aarch64-Qt6-Portable-${{ env.VERSION }}.tar.gz
-          mv PrismLauncher-*.AppImage/PrismLauncher-*-x86_64.AppImage PrismLauncher-Linux-x86_64.AppImage
-          mv PrismLauncher-*.AppImage.zsync/PrismLauncher-*-x86_64.AppImage.zsync PrismLauncher-Linux-x86_64.AppImage.zsync
-          mv PrismLauncher-*.AppImage/PrismLauncher-*-aarch64.AppImage PrismLauncher-Linux-aarch64.AppImage
-          mv PrismLauncher-*.AppImage.zsync/PrismLauncher-*-aarch64.AppImage.zsync PrismLauncher-Linux-aarch64.AppImage.zsync
-          mv PrismLauncher-macOS*/PrismLauncher.zip PrismLauncher-macOS-${{ env.VERSION }}.zip
-          mv PrismLauncher-macOS*/PrismLauncher.dmg PrismLauncher-macOS-${{ env.VERSION }}.dmg
+          mv ${{ github.workspace }}/OffPrism-source OffPrism-${{ env.VERSION }}
+          mv OffPrism-Linux-Qt6-Portable*/OffPrism-portable.tar.gz OffPrism-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
+          mv OffPrism-*.AppImage/OffPrism-*-x86_64.AppImage OffPrism-Linux-x86_64.AppImage
+          mv OffPrism-*.AppImage.zsync/OffPrism-*-x86_64.AppImage.zsync OffPrism-Linux-x86_64.AppImage.zsync
+          mv OffPrism-macOS*/OffPrism.zip OffPrism-macOS-${{ env.VERSION }}.zip
+          mv OffPrism-macOS*/OffPrism.dmg OffPrism-macOS-${{ env.VERSION }}.dmg
 
-          tar --exclude='.git' -czf PrismLauncher-${{ env.VERSION }}.tar.gz PrismLauncher-${{ env.VERSION }}
+          tar --exclude='.git' -czf OffPrism-${{ env.VERSION }}.tar.gz OffPrism-${{ env.VERSION }}
 
-          for d in PrismLauncher-Windows-MSVC*; do
+          for d in OffPrism-Windows-MSVC*; do
             cd "${d}" || continue
-            LEGACY="$(echo -n ${d} | grep -o Legacy || true)"
             ARM64="$(echo -n ${d} | grep -o arm64 || true)"
             INST="$(echo -n ${d} | grep -o Setup || true)"
             PORT="$(echo -n ${d} | grep -o Portable || true)"
-            NAME="PrismLauncher-Windows-MSVC"
-            test -z "${LEGACY}" || NAME="${NAME}-Legacy"
+            NAME="OffPrism-Windows-MSVC"
             test -z "${ARM64}" || NAME="${NAME}-arm64"
             test -z "${PORT}" || NAME="${NAME}-Portable"
-            test -z "${INST}" || mv PrismLauncher-*.exe ../${NAME}-Setup-${{ env.VERSION }}.exe
+            test -z "${INST}" || mv OffPrism-*.exe ../${NAME}-Setup-${{ env.VERSION }}.exe
             test -n "${INST}" || zip -r -9 "../${NAME}-${{ env.VERSION }}.zip" *
             cd ..
           done
 
-          for d in PrismLauncher-Windows-MinGW-w64*; do
-            cd "${d}" || continue
-            INST="$(echo -n ${d} | grep -o Setup || true)"
-            PORT="$(echo -n ${d} | grep -o Portable || true)"
-            NAME="PrismLauncher-Windows-MinGW-w64"
-            test -z "${PORT}" || NAME="${NAME}-Portable"
-            test -z "${INST}" || mv PrismLauncher-*.exe ../${NAME}-Setup-${{ env.VERSION }}.exe
-            test -n "${INST}" || zip -r -9 "../${NAME}-${{ env.VERSION }}.zip" *
-            cd ..
-          done
+      - name: Make Sparkle appcast (macOS updates)
+        env:
+          SPARKLE_ED25519_KEY: ${{ secrets.SPARKLE_ED25519_KEY }}
+        run: |
+          ZIP="OffPrism-macOS-${{ env.VERSION }}.zip"
+          SIGNATURE=""
+          if [ -n "$SPARKLE_ED25519_KEY" ]; then
+            echo "$SPARKLE_ED25519_KEY" > ed25519-priv.pem
+            SIGNATURE=$(openssl pkeyutl -sign -rawin -in "$ZIP" -inkey ed25519-priv.pem | base64 | tr -d '\n')
+            rm ed25519-priv.pem
+          fi
+          LENGTH=$(stat -c %s "$ZIP")
+          DATE=$(date -R)
+          URL="https://github.com/${{ github.repository }}/releases/download/${{ env.VERSION }}/$ZIP"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">'
+            echo '  <channel>'
+            echo '    <title>OffPrism</title>'
+            echo '    <item>'
+            echo "      <title>${{ env.CODENAME }} v${{ env.VERSION }}</title>"
+            echo "      <pubDate>$DATE</pubDate>"
+            echo "      <sparkle:version>${{ env.VERSION }}</sparkle:version>"
+            echo "      <sparkle:shortVersionString>${{ env.VERSION }}</sparkle:shortVersionString>"
+            echo '      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>'
+            echo "      <sparkle:releaseNotesLink>https://github.com/${{ github.repository }}/releases/tag/${{ env.VERSION }}</sparkle:releaseNotesLink>"
+            echo "      <enclosure url=\"$URL\" length=\"$LENGTH\" type=\"application/octet-stream\" sparkle:edSignature=\"$SIGNATURE\"/>"
+            echo '    </item>'
+            echo '  </channel>'
+            echo '</rss>'
+          } > appcast.xml
+          cat appcast.xml
 
       - name: Create release
-        id: create_release
         uses: softprops/action-gh-release@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref }}
-          name: Prism Launcher ${{ env.VERSION }}
-          draft: true
+          name: OffPrism ${{ env.CODENAME }} v${{ env.VERSION }}
+          body_path: OffPrism-${{ env.VERSION }}/.github/release-notes.md
+          draft: false
           prerelease: false
+          make_latest: true
           fail_on_unmatched_files: true
           files: |
-            PrismLauncher-Linux-x86_64.AppImage
-            PrismLauncher-Linux-x86_64.AppImage.zsync
-            PrismLauncher-Linux-aarch64.AppImage
-            PrismLauncher-Linux-aarch64.AppImage.zsync
-            PrismLauncher-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
-            PrismLauncher-Linux-aarch64-Qt6-Portable-${{ env.VERSION }}.tar.gz
-            PrismLauncher-Windows-MinGW-w64-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MinGW-w64-Portable-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MinGW-w64-Setup-${{ env.VERSION }}.exe
-            PrismLauncher-Windows-MSVC-arm64-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MSVC-arm64-Portable-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MSVC-arm64-Setup-${{ env.VERSION }}.exe
-            PrismLauncher-Windows-MSVC-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MSVC-Portable-${{ env.VERSION }}.zip
-            PrismLauncher-Windows-MSVC-Setup-${{ env.VERSION }}.exe
-            PrismLauncher-macOS-${{ env.VERSION }}.zip
-            PrismLauncher-macOS-${{ env.VERSION }}.dmg
-            PrismLauncher-${{ env.VERSION }}.tar.gz
+            OffPrism-Linux-x86_64.AppImage
+            OffPrism-Linux-x86_64.AppImage.zsync
+            OffPrism-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
+            OffPrism-Windows-MSVC-arm64-${{ env.VERSION }}.zip
+            OffPrism-Windows-MSVC-arm64-Portable-${{ env.VERSION }}.zip
+            OffPrism-Windows-MSVC-arm64-Setup-${{ env.VERSION }}.exe
+            OffPrism-Windows-MSVC-${{ env.VERSION }}.zip
+            OffPrism-Windows-MSVC-Portable-${{ env.VERSION }}.zip
+            OffPrism-Windows-MSVC-Setup-${{ env.VERSION }}.exe
+            OffPrism-macOS-${{ env.VERSION }}.zip
+            OffPrism-macOS-${{ env.VERSION }}.dmg
+            OffPrism-${{ env.VERSION }}.tar.gz
+            appcast.xml

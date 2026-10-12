@@ -344,9 +344,19 @@ bool LaunchController::reauthenticateAccount(const MinecraftAccountPtr& account,
     if (button == QMessageBox::StandardButton::Yes) {
         auto* accounts = APPLICATION->accounts();
         const bool isDefault = accounts->defaultAccount() == account;
-        if (account->accountType() == AccountType::MSA || account->accountType() == AccountType::ElyBy) {
-            auto newAccount = account->accountType() == AccountType::MSA ? MSALoginDialog::newAccount(m_parentWidget)
-                                                                          : ElyByLoginDialog::newAccount(m_parentWidget);
+        if (account->accountType() != AccountType::Offline) {
+            MinecraftAccountPtr newAccount;
+            switch (account->accountType()) {
+                case AccountType::MSA:
+                    newAccount = MSALoginDialog::newAccount(m_parentWidget);
+                    break;
+                case AccountType::ElyBy:
+                    newAccount = ElyByLoginDialog::newAccount(m_parentWidget);
+                    break;
+                default:
+                    newAccount = ElyByLoginDialog::newAuthlibAccount(m_parentWidget, account->accountData()->authlibServer());
+                    break;
+            }
 
             if (newAccount != nullptr) {
                 accounts->removeAccount(accounts->index(accounts->findAccountByProfileId(account->profileId())));

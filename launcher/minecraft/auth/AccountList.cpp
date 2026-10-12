@@ -350,6 +350,9 @@ QVariant AccountList::data(const QModelIndex& index, int role) const
                         case AccountType::ElyBy: {
                             return tr("Ely.by", "Account type");
                         }
+                        case AccountType::AuthlibInjector: {
+                            return tr("authlib-injector", "Account type");
+                        }
                     }
                     return tr("Unknown", "Account type");
                 }

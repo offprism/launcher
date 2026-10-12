@@ -12,7 +12,7 @@ set(Launcher_CommonName "OffPrism")
 set(Launcher_DisplayName "OffPrism")
 set(Launcher_AppID "org.offprism.OffPrism")
 set(Launcher_Domain "offprism.local")
-set(Launcher_Git "https://github.com/PrismLauncher/PrismLauncher")
+set(Launcher_Git "https://github.com/offprism/launcher")
 
 set(Launcher_Name "${Launcher_CommonName}" PARENT_SCOPE)
 set(Launcher_DisplayName "${Launcher_DisplayName}" PARENT_SCOPE)

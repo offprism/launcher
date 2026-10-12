@@ -293,6 +293,8 @@ bool AccountData::resumeStateFromV3(QJsonObject data)
         type = AccountType::Offline;
     } else if (typeS == "ElyBy") {
         type = AccountType::ElyBy;
+    } else if (typeS == "AuthlibInjector") {
+        type = AccountType::AuthlibInjector;
     } else {
         qWarning() << "Failed to parse account data: type is not recognized.";
         return false;
@@ -339,6 +341,8 @@ QJsonObject AccountData::saveState() const
         output["type"] = "Offline";
     } else if (type == AccountType::ElyBy) {
         output["type"] = "ElyBy";
+    } else if (type == AccountType::AuthlibInjector) {
+        output["type"] = "AuthlibInjector";
     }
 
     tokenToJSONV3(output, yggdrasilToken, "ygg");
@@ -369,4 +373,15 @@ QString AccountData::profileName() const
 QString AccountData::lastError() const
 {
     return errorString;
+}
+
+QString AccountData::authlibServer() const
+{
+    if (type == AccountType::ElyBy) {
+        return "ely.by";
+    }
+    if (type == AccountType::AuthlibInjector) {
+        return yggdrasilToken.extra.value("server").toString();
+    }
+    return {};
 }

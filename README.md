@@ -1,116 +1,116 @@
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/program_info/org.prismlauncher.PrismLauncher.logo-darkmode.svg">
-  <source media="(prefers-color-scheme: light)" srcset="/program_info/org.prismlauncher.PrismLauncher.logo.svg">
-  <img alt="Prism Launcher" src="/program_info/org.prismlauncher.PrismLauncher.logo.svg" width="40%">
-</picture>
-</p>
+<div align="center">
+
+<img width="160" height="160" align="center" src="./docs/logo.png" alt="OffPrism logo">
+
+<h1>
+<a href="https://github.com/offprism/launcher">OffPrism</a>
+</h1>
+
+A Minecraft launcher with **offline, Ely.by and authlib-injector accounts**,<br>
+separate instances and mods and modpacks from **Modrinth, CurseForge, FTB, Technic and ATLauncher** in one click
+
+A fork of [Prism Launcher](https://prismlauncher.org/) — **not** endorsed by or affiliated with its team
 
 <p align="center">
-  Prism Launcher is a custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once.<br />
-  <br />This is a <b>fork</b> of the MultiMC Launcher and is <b>not</b> endorsed by it.
+<strong>English</strong> | <a href="./README_ru.md">Русский</a>
 </p>
+
+<div>
+
+[![Latest release](https://img.shields.io/github/v/release/offprism/launcher?label=Release&style=for-the-badge&color=8a8a8a)](https://github.com/offprism/launcher/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/offprism/launcher/total?label=Downloads&style=for-the-badge&color=8a8a8a)](https://github.com/offprism/launcher/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/offprism/launcher?label=Stars&style=for-the-badge&color=8a8a8a)](https://github.com/offprism/launcher/stargazers)
+![No ads](https://img.shields.io/badge/ads-none-8a8a8a?style=for-the-badge)
+
+</div>
+
+</div>
+
+## Features
+
+- **Play offline** without a Microsoft account — just pick a nickname
+- **Ely.by accounts** with your skin shown in the launcher and **in game**, without any mods (two-factor authentication supported)
+- **authlib-injector accounts** for any compatible skin server — LittleSkin, Blessing Skin and others; [authlib-injector](https://github.com/yushijinhun/authlib-injector) ships with the launcher
+- Microsoft accounts still work too
+- **Glass theme** — a dark translucent theme with the Windows 11 acrylic backdrop
+- **Instances** — every build has its own mods, resource packs, shaders, worlds and settings, and never interferes with another
+- **Mod catalog** for Modrinth and CurseForge with dependencies installed automatically and **update all** in one click
+- **Modpacks from five libraries** — Modrinth, CurseForge, FTB, Technic and ATLauncher
+- **One-click launcher updates** straight from this repository's releases
+- Builds for **Windows (x64 and ARM64), Linux and macOS** (Intel and Apple Silicon)
+
+## Comparison
+
+| Feature                                        | OffPrism          | Prism Launcher  |
+|------------------------------------------------|-------------------|-----------------|
+| Offline mode without a Microsoft account       | ✅                | ❌              |
+| Ely.by accounts with skins in game             | ✅                | ❌              |
+| authlib-injector accounts (LittleSkin, ...)    | ✅                | ❌              |
+| Microsoft accounts                             | ✅                | ✅              |
+| Translucent glass theme                        | ✅                | ❌              |
+| Separate instances                             | ✅                | ✅              |
+| Built-in Modrinth & CurseForge catalog         | ✅                | ✅              |
+| FTB, Technic and ATLauncher modpacks           | ✅                | ✅              |
+| No ads or telemetry                            | ✅                | ✅              |
+| Based on                                       | Prism Launcher    | PolyMC          |
 
 ## Installation
 
-- All downloads and instructions for Prism Launcher can be found on our [Website](https://prismlauncher.org/download).
-- Last build status can be found in the [GitHub Actions](https://github.com/PrismLauncher/PrismLauncher/actions) tab (this also includes the pull requests status).
+### Stable releases
 
-<p align="center">
-<a href="https://repology.org/project/prismlauncher/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/prismlauncher.svg?columns=3" alt="Packaging status">
-</a>
-</p>
+Download OffPrism from the [GitHub Releases](https://github.com/offprism/launcher/releases/latest) page:
 
-### Development Builds
+| System                          | File                                                 |
+|---------------------------------|------------------------------------------------------|
+| Windows                         | `OffPrism-Windows-MSVC-Setup-<version>.exe`          |
+| Windows (portable)              | `OffPrism-Windows-MSVC-Portable-<version>.zip`       |
+| Windows on ARM                  | `OffPrism-Windows-MSVC-arm64-Setup-<version>.exe`    |
+| Windows on ARM (portable)       | `OffPrism-Windows-MSVC-arm64-Portable-<version>.zip` |
+| Linux                           | `OffPrism-Linux-x86_64.AppImage`                     |
+| Linux (portable)                | `OffPrism-Linux-Qt6-Portable-<version>.tar.gz`       |
+| macOS (Intel and Apple Silicon) | `OffPrism-macOS-<version>.dmg`                       |
 
-Please understand that these builds are not intended for most users. There may be bugs, and other instabilities. You have been warned.
+Once installed, the launcher updates itself from this repository.
 
-There are development builds available through:
+The builds are not code-signed: Windows SmartScreen may ask you to confirm ("More info" → "Run anyway"), and on macOS open the app with right click → "Open" the first time.
 
-- [GitHub Actions](https://github.com/PrismLauncher/PrismLauncher/actions) (includes builds from pull requests opened by contributors)
-- [nightly.link](https://prismlauncher.org/nightly) (this will always point only to the latest version of develop)
+### Development builds
 
-These have debug information in the binaries, so their file sizes are relatively larger.
-
-Prebuilt Development builds are provided for **Linux**, **Windows** and **macOS**.
-
-On Linux, we also offer our own [Flatpak nightly repository](https://github.com/PrismLauncher/flatpak). Most software centers are able to install it by opening [this link](https://flatpak.prismlauncher.org/prismlauncher-nightly.flatpakref).
+Every commit to `main` is built by [GitHub Actions](https://github.com/offprism/launcher/actions); the builds are attached to each run as artifacts. They are not meant for most users and may be broken. You have been warned.
 
 ## Community & Support
 
-Feel free to create a GitHub issue if you find a bug or want to suggest a new feature. We have multiple community spaces where other community members can help you:
+Found a bug or want a feature? Open an issue in [GitHub Issues](https://github.com/offprism/launcher/issues). Pull requests are welcome.
 
-- **Our Discord server:**
+## Building from source
 
-[![Prism Launcher Discord server](https://discordapp.com/api/guilds/1031648380885147709/widget.png?style=banner3)](https://prismlauncher.org/discord)
+OffPrism builds exactly like Prism Launcher: CMake, Qt 6.8+, a C++20 compiler, a JDK 17 and [vcpkg](https://vcpkg.io/) for the remaining libraries.
 
-- **Our Matrix space:**
+```bash
+git clone --recursive https://github.com/offprism/launcher.git
+cd launcher
+cmake --preset windows_msvc   # or linux, macos_universal, windows_mingw
+cmake --build --preset windows_msvc --config Release
+```
 
-[![Prism Launcher Space](https://img.shields.io/matrix/prismlauncher:matrix.org?style=for-the-badge&label=Matrix%20Space&logo=matrix&color=purple)](https://prismlauncher.org/matrix)
+[`.github/workflows/build.yml`](.github/workflows/build.yml) shows the exact steps for every platform. The release name and version are set in the top-level `CMakeLists.txt` (`Launcher_VERSION_*` and `Launcher_VERSION_CODENAME`).
 
-- **Our Subreddit:**
+## Authors
 
-[![r/PrismLauncher](https://img.shields.io/reddit/subreddit-subscribers/prismlauncher?style=for-the-badge&logo=reddit)](https://prismlauncher.org/reddit)
+- [offprism](https://github.com/offprism) — developer
+- [Prism Launcher](https://github.com/PrismLauncher/PrismLauncher), PolyMC and MultiMC contributors — the launcher this fork is built on
 
-## Translations
+## Other
 
-The translation effort for Prism Launcher is hosted on [Weblate](https://hosted.weblate.org/projects/prismlauncher/launcher/) and information about translating Prism Launcher is available at <https://github.com/PrismLauncher/Translations>.
+<ul>
+  <li>We <strong>ARE NOT</strong> related to the <a href="https://prismlauncher.org/">Prism Launcher</a> team. Please do not send them bug reports about this build.</li>
+  <li>We <strong>ARE NOT</strong> collecting your information.</li>
+  <li>Passwords of Ely.by and authlib-injector accounts are never saved — only the session token is.</li>
+  <li>We <strong>ARE</strong> open to contributions.</li>
+</ul>
 
-## Building
+## License
 
-If you want to build Prism Launcher yourself, check the [build instructions](https://prismlauncher.org/wiki/development/build-instructions).
+[![License](https://img.shields.io/badge/license-GPL--3.0-8a8a8a?style=for-the-badge)](LICENSE)
 
-## Sponsors & Partners
-
-We thank all the wonderful backers over at Open Collective! Support Prism Launcher by [becoming a backer](https://opencollective.com/prismlauncher).
-
-[![OpenCollective Backers](https://opencollective.com/prismlauncher/backers.svg?width=890&limit=1000)](https://opencollective.com/prismlauncher#backers)
-
-Thanks to JetBrains for providing us a few licenses for all their products, as part of their [Open Source program](https://www.jetbrains.com/opensource/).
-
-<a href="https://jb.gg/OpenSource">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://www.jetbrains.com/company/brand/img/logo_jb_dos_4.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg">
-  <img alt="JetBrains logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg" width="40%">
-</picture>
-</a>
-
-Thanks to Weblate for hosting our translation efforts.
-
-<a href="https://hosted.weblate.org/engage/prismlauncher/">
-<img src="https://hosted.weblate.org/widgets/prismlauncher/-/open-graph.png" alt="Translation status" width="300" />
-</a>
-
-Thanks to Netlify for providing us their excellent web services, as part of their [Open Source program](https://www.netlify.com/open-source/).
-
-<a href="https://www.netlify.com"> <img src="https://www.netlify.com/v3/img/components/netlify-color-accent.svg" alt="Deploys by Netlify" /> </a>
-
-Thanks to the awesome people over at [MacStadium](https://www.macstadium.com/), for providing M1-Macs for development purposes!
-
-<a href="https://www.macstadium.com"><img src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png" alt="Powered by MacStadium" width="300"></a>
-
-## Forking/Redistributing/Custom builds policy
-
-You are free to fork, redistribute and provide custom builds as long as you follow the terms of the [license](LICENSE) (this is a legal responsibility), and if you made code changes rather than just packaging a custom build, please do the following as a basic courtesy:
-
-- Make it clear that your fork is not Prism Launcher and is not endorsed by or affiliated with the Prism Launcher project (<https://prismlauncher.org>).
-- Go through [CMakeLists.txt](CMakeLists.txt) and change Prism Launcher's API keys to your own or set them to empty strings (`""`) to disable them (this way the program will still compile but the functionality requiring those keys will be disabled).
-
-If you have any questions or want any clarification on the above conditions please make an issue and ask us.
-
-If you are just building Prism Launcher for your distribution, please make sure to set the `Launcher_BUILD_PLATFORM` to a slug representing your distribution. Examples are `archlinux`, `fedora` and `nixpkgs`.
-
-Note that if you build this software without removing the provided API keys in [CMakeLists.txt](CMakeLists.txt) you are accepting the following terms and conditions:
-
-- [Microsoft Identity Platform Terms of Use](https://docs.microsoft.com/en-us/legal/microsoft-identity-platform/terms-of-use)
-- [CurseForge 3rd Party API Terms and Conditions](https://support.curseforge.com/en/support/solutions/articles/9000207405-curse-forge-3rd-party-api-terms-and-conditions)
-
-If you do not agree with these terms and conditions, then remove the associated API keys from the [CMakeLists.txt](CMakeLists.txt) file by setting them to an empty string (`""`).
-
-## License [![https://github.com/PrismLauncher/PrismLauncher/blob/develop/LICENSE](https://img.shields.io/github/license/PrismLauncher/PrismLauncher?label=License&logo=gnu&color=C4282D)](LICENSE)
-
-All launcher code is available under the GPL-3.0-only license.
-
-The logo and related assets are under the CC BY-SA 4.0 license.
+OffPrism is licensed under the GNU General Public License v3.0, inherited from Prism Launcher. See [LICENSE](LICENSE) and [COPYING.md](COPYING.md) for details. authlib-injector is distributed under its own [AGPL-3.0 license](https://github.com/yushijinhun/authlib-injector/blob/develop/LICENSE).

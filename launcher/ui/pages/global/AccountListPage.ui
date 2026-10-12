@@ -53,6 +53,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionAddElyBy"/>
+   <addaction name="actionAddAuthlib"/>
    <addaction name="actionAddMicrosoft"/>
    <addaction name="actionAddOffline"/>
    <addaction name="actionRefresh"/>
@@ -93,6 +94,14 @@
   <action name="actionAddElyBy">
    <property name="text">
     <string>Add &amp;Ely.by</string>
+   </property>
+  </action>
+  <action name="actionAddAuthlib">
+   <property name="text">
+    <string>Add a&amp;uthlib-injector</string>
+   </property>
+   <property name="toolTip">
+    <string>Log in to any authlib-injector skin server (LittleSkin, Blessing Skin...)</string>
    </property>
   </action>
   <action name="actionAddOffline">
