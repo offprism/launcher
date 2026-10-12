@@ -67,3 +67,4 @@ libraries/libnbtplusplus/
 cmake/vcpkg/
 build/
 install/
+OffPrism-Setup.exe

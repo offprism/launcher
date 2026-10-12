@@ -23,6 +23,7 @@ bool AuthSession::MakeOffline(QString offline_playername)
     session = "-";
     access_token = "0";
     player_name = offline_playername;
+    authlib_injector_server.clear();
     return true;
 }
 

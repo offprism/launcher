@@ -93,6 +93,18 @@ void LauncherPartLaunch::executeTask()
 
     m_launchScript = instance->createLaunchScript(m_session, m_targetToJoin);
     QStringList args = instance->javaArguments();
+    if (m_session && m_session->launchMode == LaunchMode::Normal && !m_session->authlib_injector_server.isEmpty()) {
+        QString injectorPath = APPLICATION->getJarPath("authlib-injector.jar");
+        if (injectorPath.isEmpty()) {
+            emit logLine(tr("authlib-injector.jar could not be found, skins of the Ely.by account will not work in game."),
+                         MessageLevel::Warning);
+        } else {
+#ifdef Q_OS_WIN
+            injectorPath = FS::getPathNameInLocal8bit(injectorPath);
+#endif
+            args.prepend("-javaagent:" + injectorPath + "=" + m_session->authlib_injector_server);
+        }
+    }
     QString allArgs = args.join(" ");
     emit logLine("Java arguments:\n  " + m_parent->censorPrivateInfo(allArgs) + "\n", MessageLevel::Launcher);
 

@@ -88,7 +88,7 @@ struct MinecraftProfile {
     Validity validity = Validity::None;
 };
 
-enum class AccountType { MSA, Offline };
+enum class AccountType { MSA, Offline, ElyBy };
 
 enum class AccountState { Unchecked, Offline, Working, Online, Disabled, Errored, Expired, Gone };
 
@@ -118,6 +118,9 @@ struct AccountData {
 
     // runtime only information (not saved with the account)
     QString internalId;
+    // Ely.by credentials, only kept in memory during the login flow
+    QString elyLogin;
+    QString elyPassword;
     QString errorString;
     QNetworkReply::NetworkError networkError = QNetworkReply::NoError;
     AccountState accountState = AccountState::Unchecked;

@@ -87,6 +87,8 @@ class MinecraftAccount : public QObject, public Usable {
 
     static MinecraftAccountPtr createOffline(const QString& username);
 
+    static MinecraftAccountPtr createElyBy(const QString& login, const QString& password);
+
     static MinecraftAccountPtr loadFromJsonV3(const QJsonObject& json);
 
     static QUuid uuidFromUsername(QString username);
@@ -116,7 +118,8 @@ class MinecraftAccount : public QObject, public Usable {
 
     AccountType accountType() const noexcept { return data.type; }
 
-    bool ownsMinecraft() const { return data.type != AccountType::Offline && data.minecraftEntitlement.ownsMinecraft; }
+    // OffPrism: offline and Ely.by accounts are always allowed to play
+    bool ownsMinecraft() const { return data.type != AccountType::MSA || data.minecraftEntitlement.ownsMinecraft; }
 
     bool hasProfile() const { return data.profileId().size() != 0; }
 
@@ -128,6 +131,9 @@ class MinecraftAccount : public QObject, public Usable {
             } break;
             case AccountType::Offline: {
                 return "offline";
+            } break;
+            case AccountType::ElyBy: {
+                return "mojang";
             } break;
             default: {
                 return "unknown";
