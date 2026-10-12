@@ -14,13 +14,25 @@
 #endif
 
 namespace {
-QPalette solidPalette();
-const char* const s_opaqueClasses[] = { "QMenu", "QComboBoxPrivateContainer", "QToolTip", "QLineEdit", "QComboBox",
-                                         "QAbstractSpinBox", "QPlainTextEdit", "QTextEdit" };
-}  // namespace
-
-namespace {
+constexpr double s_windowOpacity = 0.93;
 bool s_glassActive = false;
+
+bool isGlassWindow(QWidget* widget)
+{
+    return widget && widget->isWindow() && (qobject_cast<QMainWindow*>(widget) || qobject_cast<QDialog*>(widget));
+}
+
+void styleWindow(QWidget* window, bool glass)
+{
+    window->setWindowOpacity(glass ? s_windowOpacity : 1.0);
+#ifdef Q_OS_WIN
+    if (glass && window->testAttribute(Qt::WA_WState_Created)) {
+        // Dark title bar to match the theme (DWMWA_USE_IMMERSIVE_DARK_MODE)
+        BOOL dark = TRUE;
+        DwmSetWindowAttribute(reinterpret_cast<HWND>(window->winId()), 20, &dark, sizeof(dark));
+    }
+#endif
+}
 
 class GlassWindowFilter : public QObject {
    public:
@@ -29,36 +41,16 @@ class GlassWindowFilter : public QObject {
    protected:
     bool eventFilter(QObject* watched, QEvent* event) override
     {
-        if (event->type() == QEvent::Polish && GlassTheme::isActive()) {
+        if (event->type() == QEvent::Show && GlassTheme::isActive()) {
             auto* widget = qobject_cast<QWidget*>(watched);
-            if (widget && widget->isWindow() && (qobject_cast<QMainWindow*>(widget) || qobject_cast<QDialog*>(widget))) {
-                GlassTheme::makeTranslucent(widget);
-            }
+            if (isGlassWindow(widget))
+                styleWindow(widget, true);
         }
         return QObject::eventFilter(watched, event);
     }
 };
 
 GlassWindowFilter* s_filter = nullptr;
-
-#ifdef Q_OS_WIN
-void enableBackdrop(QWidget* window)
-{
-    auto hwnd = reinterpret_cast<HWND>(window->winId());
-    // Let DWM draw behind the whole client area
-    MARGINS margins = { -1, -1, -1, -1 };
-    DwmExtendFrameIntoClientArea(hwnd, &margins);
-
-    // Dark title bar (DWMWA_USE_IMMERSIVE_DARK_MODE)
-    BOOL dark = TRUE;
-    DwmSetWindowAttribute(hwnd, 20, &dark, sizeof(dark));
-
-    // Acrylic backdrop on Windows 11 22H2+ (DWMWA_SYSTEMBACKDROP_TYPE = 38, DWMSBT_TRANSIENTWINDOW = 3).
-    // Older systems ignore the attribute and just keep the semi-transparent window.
-    int backdrop = 3;
-    DwmSetWindowAttribute(hwnd, 38, &backdrop, sizeof(backdrop));
-}
-#endif
 }  // namespace
 
 bool GlassTheme::isActive()
@@ -68,40 +60,26 @@ bool GlassTheme::isActive()
 
 void GlassTheme::deactivate()
 {
-    s_glassActive = false;
-}
-
-void GlassTheme::setPopupPalette(const QPalette& palette)
-{
-    for (const char* cls : s_opaqueClasses) {
-        QApplication::setPalette(palette, cls);
-    }
-}
-
-void GlassTheme::makeTranslucent(QWidget* window)
-{
-    if (window->testAttribute(Qt::WA_TranslucentBackground))
+    if (!s_glassActive)
         return;
-    window->setAttribute(Qt::WA_TranslucentBackground);
-#ifdef Q_OS_WIN
-    enableBackdrop(window);
-#endif
+    s_glassActive = false;
+    for (auto* widget : QApplication::topLevelWidgets()) {
+        if (isGlassWindow(widget))
+            styleWindow(widget, false);
+    }
 }
 
 void GlassTheme::apply(bool initial)
 {
     FusionTheme::apply(initial);
-    auto solid = fadeInactive(solidPalette(), fadeAmount(), fadeColor());
-    setPopupPalette(solid);
     s_glassActive = true;
     if (!s_filter) {
         s_filter = new GlassWindowFilter(qApp);
         qApp->installEventFilter(s_filter);
     }
-    // windows that already exist (when switching themes at runtime)
     for (auto* widget : QApplication::topLevelWidgets()) {
-        if (!widget->isVisible() && (qobject_cast<QMainWindow*>(widget) || qobject_cast<QDialog*>(widget)))
-            makeTranslucent(widget);
+        if (isGlassWindow(widget) && widget->isVisible())
+            styleWindow(widget, true);
     }
 }
 
@@ -117,40 +95,27 @@ QString GlassTheme::name()
 
 QString GlassTheme::tooltip()
 {
-    return QObject::tr("Dark semi-transparent theme. Restart the launcher after selecting it to make all windows translucent.");
+    return QObject::tr("Dark theme with semi-transparent windows.");
 }
 
-namespace {
-// Opaque dark palette (same spirit as the Dark theme), used for controls and popups
-QPalette solidPalette()
+QPalette GlassTheme::colorScheme()
 {
     QPalette p;
-    p.setColor(QPalette::Window, QColor(38, 40, 48));
+    p.setColor(QPalette::Window, QColor(30, 32, 40));
     p.setColor(QPalette::WindowText, QColor(236, 238, 244));
-    p.setColor(QPalette::Base, QColor(28, 30, 36));
-    p.setColor(QPalette::AlternateBase, QColor(34, 36, 43));
-    p.setColor(QPalette::ToolTipBase, QColor(30, 32, 40));
+    p.setColor(QPalette::Base, QColor(22, 24, 30));
+    p.setColor(QPalette::AlternateBase, QColor(28, 30, 37));
+    p.setColor(QPalette::ToolTipBase, QColor(36, 38, 48));
     p.setColor(QPalette::ToolTipText, QColor(236, 238, 244));
     p.setColor(QPalette::Text, QColor(236, 238, 244));
-    p.setColor(QPalette::Button, QColor(52, 55, 66));
+    p.setColor(QPalette::Button, QColor(44, 47, 58));
     p.setColor(QPalette::ButtonText, QColor(236, 238, 244));
     p.setColor(QPalette::BrightText, QColor(255, 90, 90));
     p.setColor(QPalette::Link, QColor(120, 190, 255));
     p.setColor(QPalette::Highlight, QColor(110, 132, 230));
     p.setColor(QPalette::HighlightedText, Qt::white);
     p.setColor(QPalette::PlaceholderText, QColor(150, 154, 166));
-    return p;
-}
-}  // namespace
-
-QPalette GlassTheme::colorScheme()
-{
-    // Only the window and view backgrounds are translucent, everything Fusion draws with gradients stays opaque
-    QPalette palette = solidPalette();
-    palette.setColor(QPalette::Window, QColor(22, 24, 30, 185));
-    palette.setColor(QPalette::Base, QColor(14, 16, 20, 150));
-    palette.setColor(QPalette::AlternateBase, QColor(255, 255, 255, 12));
-    return fadeInactive(palette, fadeAmount(), fadeColor());
+    return fadeInactive(p, fadeAmount(), fadeColor());
 }
 
 double GlassTheme::fadeAmount()
@@ -160,7 +125,7 @@ double GlassTheme::fadeAmount()
 
 QColor GlassTheme::fadeColor()
 {
-    return QColor(38, 40, 48);
+    return QColor(30, 32, 40);
 }
 
 bool GlassTheme::hasStyleSheet()
@@ -170,8 +135,5 @@ bool GlassTheme::hasStyleSheet()
 
 QString GlassTheme::appStyleSheet()
 {
-    // translucent windows do not fill their background by themselves
-    return "QMainWindow, QDialog { background-color: rgba(22, 24, 30, 185); }\n"
-           "QStatusBar { background-color: rgba(22, 24, 30, 200); }\n"
-           "QToolTip { color: #eceef4; background-color: #1e2028; border: 1px solid #4a4e5c; }";
+    return "QToolTip { color: #eceef4; background-color: #242630; border: 1px solid #4a4e5c; }";
 }
