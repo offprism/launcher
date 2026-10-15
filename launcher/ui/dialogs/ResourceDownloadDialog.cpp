@@ -45,6 +45,7 @@
 
 #include "ui/pages/modplatform/flame/FlameResourcePages.h"
 #include "ui/pages/modplatform/modrinth/ModrinthResourcePages.h"
+#include "ui/pages/modplatform/github/GitHubResourcePages.h"
 
 #include "modplatform/flame/FlameAPI.h"
 #include "modplatform/modrinth/ModrinthAPI.h"
@@ -344,6 +345,9 @@ void ResourceDownloadDialog::setResourceMetadata(const std::shared_ptr<Metadata:
         case ModPlatform::ResourceProvider::FLAME:
             selectPage(Flame::id());
             break;
+        case ModPlatform::ResourceProvider::GITHUB:
+            selectPage(GitHub::id());
+            break;
     }
 
     setWindowTitle(tr("Change %1 version").arg(meta->name));
@@ -400,6 +404,11 @@ ResourceDownloadDialog* ResourceDownloadDialog::createMod(QWidget* parent,
         flamePage->setSuppressInitialSearch(suppressInitialSearch);
         pages.append(flamePage);
     }
+    {
+        auto* githubPage = GitHub::createModPage(dialog, *instance);
+        githubPage->setSuppressInitialSearch(suppressInitialSearch);
+        pages.append(githubPage);
+    }
     dialog->initPages(pages);
     return dialog;
 }
@@ -419,6 +428,11 @@ ResourceDownloadDialog* ResourceDownloadDialog::createResourcePack(QWidget* pare
         auto* flamePage = Flame::createResourcePackResourcePage(dialog, *instance);
         flamePage->setSuppressInitialSearch(suppressInitialSearch);
         pages.append(flamePage);
+    }
+    {
+        auto* githubPage = GitHub::createResourcePackResourcePage(dialog, *instance);
+        githubPage->setSuppressInitialSearch(suppressInitialSearch);
+        pages.append(githubPage);
     }
     dialog->initPages(pages);
 
@@ -461,6 +475,11 @@ ResourceDownloadDialog* ResourceDownloadDialog::createShaderPack(QWidget* parent
         auto* flamePage = Flame::createShaderPackResourcePage(dialog, *instance);
         flamePage->setSuppressInitialSearch(suppressInitialSearch);
         pages.append(flamePage);
+    }
+    {
+        auto* githubPage = GitHub::createShaderPackResourcePage(dialog, *instance);
+        githubPage->setSuppressInitialSearch(suppressInitialSearch);
+        pages.append(githubPage);
     }
     dialog->initPages(pages);
 

@@ -192,6 +192,12 @@ void V1::updateModIndex(const QDir& indexDir, Mod& mod)
                 { "version", mod.version().toString().toStdString() },
             };
             break;
+        case (ModPlatform::ResourceProvider::GITHUB):
+            update = toml::table{
+                { "repository", mod.modId().toString().toStdString() },
+                { "release", mod.version().toString().toStdString() },
+            };
+            break;
     }
 
     toml::array loaders;

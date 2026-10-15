@@ -499,6 +499,8 @@ set(API_SOURCES
     modplatform/flame/FlamePackIndex.cpp
     modplatform/modrinth/ModrinthAPI.h
     modplatform/modrinth/ModrinthAPI.cpp
+    modplatform/github/GitHubAPI.h
+    modplatform/github/GitHubAPI.cpp
     modplatform/helpers/HashUtils.h
     modplatform/helpers/HashUtils.cpp
     modplatform/helpers/OverrideUtils.h
@@ -1038,6 +1040,8 @@ SET(LAUNCHER_SOURCES
     ui/pages/modplatform/OptionalModDialog.h
 
     ui/pages/modplatform/modrinth/ModrinthResourcePages.cpp
+    ui/pages/modplatform/github/GitHubResourcePages.h
+    ui/pages/modplatform/github/GitHubResourcePages.cpp
     ui/pages/modplatform/modrinth/ModrinthResourcePages.h
 
     # GUI - dialogs

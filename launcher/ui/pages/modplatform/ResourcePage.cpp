@@ -505,7 +505,9 @@ void ResourcePage::addResourceToPage(ModPlatform::IndexedPack::Ptr pack,
                                      QString downloadReason,
                                      QString dependentOn)
 {
-    bool isIndexed = m_desc.isIndexed && !APPLICATION->settings()->get("ModMetadataDisabled").toBool();
+    // OffPrism: GitHub resources are plain downloads without platform metadata
+    bool isIndexed = m_desc.isIndexed && !APPLICATION->settings()->get("ModMetadataDisabled").toBool() &&
+                     pack->provider != ModPlatform::ResourceProvider::GITHUB;
     m_model->addPack(std::move(pack), ver, baseModel, isIndexed, std::move(downloadReason), std::move(dependentOn));
 }
 

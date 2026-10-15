@@ -135,7 +135,7 @@ bool ModModel::checkVersionFilters(const ModPlatform::IndexedVersion& v)
             checkSide(m_filter->side, v.side) &&                                              // side
             (m_filter->releases.empty() ||                                                    // releases
              std::find(m_filter->releases.cbegin(), m_filter->releases.cend(), v.versionType) != m_filter->releases.cend()) &&
-            m_filter->checkMcVersions(v.mcVersion));  // mcVersions
+            (v.mcVersion.isEmpty() || m_filter->checkMcVersions(v.mcVersion)));  // mcVersions (unknown for some GitHub releases)
 }
 
 }  // namespace ResourceDownload

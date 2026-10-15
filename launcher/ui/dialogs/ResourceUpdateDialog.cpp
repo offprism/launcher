@@ -42,6 +42,8 @@ ModPlatform::ResourceProvider next(ModPlatform::ResourceProvider p)
             return ModPlatform::ResourceProvider::FLAME;
         case ModPlatform::ResourceProvider::FLAME:
             return ModPlatform::ResourceProvider::MODRINTH;
+        case ModPlatform::ResourceProvider::GITHUB:
+            return ModPlatform::ResourceProvider::MODRINTH;
     }
 
     return ModPlatform::ResourceProvider::FLAME;
@@ -322,6 +324,8 @@ auto ResourceUpdateDialog::ensureMetadata() -> bool
             case ModPlatform::ResourceProvider::FLAME:
                 flameTmp.push_back(resource);
                 break;
+            case ModPlatform::ResourceProvider::GITHUB:
+                break;
         }
     };
 
@@ -430,6 +434,9 @@ void ResourceUpdateDialog::onMetadataEnsured(Resource* resource)
             break;
         case ModPlatform::ResourceProvider::FLAME:
             m_flameToUpdate.push_back(resource);
+            break;
+        case ModPlatform::ResourceProvider::GITHUB:
+            // GitHub resources are not tracked for updates
             break;
     }
 }
