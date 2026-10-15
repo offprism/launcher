@@ -35,7 +35,6 @@ A fork of [Prism Launcher](https://prismlauncher.org/) — **not** endorsed by o
 - **Glass theme** — a dark translucent theme with the Windows 11 acrylic backdrop
 - **Instances** — every build has its own mods, resource packs, shaders, worlds and settings, and never interferes with another
 - **Mod catalog** for Modrinth and CurseForge with dependencies installed automatically and **update all** in one click
-- **GitHub Releases as a third source** for mods, resource packs and shader packs — the right file for your mod loader is picked automatically and checked against GitHub's SHA-256 digest
 - **Modpacks from five libraries** — Modrinth, CurseForge, FTB, Technic and ATLauncher
 - **One-click launcher updates** straight from this repository's releases
 - Builds for **Windows (x64 and ARM64), Linux and macOS** (Intel and Apple Silicon)
@@ -51,7 +50,6 @@ A fork of [Prism Launcher](https://prismlauncher.org/) — **not** endorsed by o
 | Translucent glass theme                        | ✅                | ❌              |
 | Separate instances                             | ✅                | ✅              |
 | Built-in Modrinth & CurseForge catalog         | ✅                | ✅              |
-| Mods, resource packs and shaders from GitHub   | ✅                | ❌              |
 | FTB, Technic and ATLauncher modpacks           | ✅                | ✅              |
 | No ads or telemetry                            | ✅                | ✅              |
 | Based on                                       | Prism Launcher    | PolyMC          |
