@@ -1,26 +1,18 @@
-## OffPrism Piano v1.0.1
+## OffPrism Piano v1.0.2
 
-### Fixed
+### New
 
-- **Glass theme**: windows no longer get drawing glitches (pages of the settings window were painted over each other). The theme now draws everything opaque and makes the whole window slightly transparent.
-- **News**: the news bar shows OffPrism news from [offprism.github.io](https://offprism.github.io/news/) instead of Prism Launcher news.
-- After a Microsoft login the browser opens an OffPrism page.
+- **Russian translation for everything OffPrism adds**: the Ely.by and authlib-injector buttons, the login dialogs, error messages, the Glass theme name, and the standard dialog buttons (Cancel, Yes, No…) which were shown in English before.
+- **Signed macOS updates**: macOS builds now verify updates with an ed25519 signature, so OffPrism on macOS can update itself from now on.
 
-### Downloads
+### Checked
 
-| System | File |
-|---|---|
-| Windows | `OffPrism-Windows-MSVC-Setup-1.0.1.exe` |
-| Windows on ARM | `OffPrism-Windows-MSVC-arm64-Setup-1.0.1.exe` |
-| Linux | `OffPrism-Linux-x86_64.AppImage` |
-| macOS | `OffPrism-macOS-1.0.1.dmg` |
-
-Portable versions are the `*-Portable-*` archives. Builds are not code-signed.
+- Windows auto-update from v1.0.0 to v1.0.1 works end to end: the portable build downloads the new version from GitHub, replaces its files and restarts.
 
 ---
 
-## OffPrism Piano v1.0.1 (RU)
+## OffPrism Piano v1.0.2 (RU)
 
-- **Тема Glass**: окна больше не «ломаются» (страницы настроек рисовались друг поверх друга). Теперь тема рисует всё непрозрачно, а полупрозрачным делает окно целиком.
-- **Новости**: в строке новостей теперь новости OffPrism с [offprism.github.io](https://offprism.github.io/news/), а не Prism Launcher.
-- После входа через Microsoft в браузере открывается страница OffPrism.
+- **Русский перевод всего, что добавил OffPrism**: кнопки Ely.by и authlib-injector, окна входа, сообщения об ошибках, название темы Glass и стандартные кнопки окон («Отмена», «Да», «Нет»…), которые раньше были на английском.
+- **Подписанные обновления для macOS**: теперь обновления на macOS проверяются подписью ed25519, и OffPrism на Mac может обновляться сам.
+- Проверено автообновление на Windows: портативная версия 1.0.0 сама скачала 1.0.1 с GitHub, заменила файлы и перезапустилась.
