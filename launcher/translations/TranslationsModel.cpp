@@ -35,6 +35,7 @@
  */
 
 #include "TranslationsModel.h"
+#include "OffPrismTranslator.h"
 
 #include <QDebug>
 #include <algorithm>
@@ -457,6 +458,11 @@ bool TranslationsModel::selectLanguage(QString key) const
     }
 
     // uninstall existing translators if there are any
+    static std::unique_ptr<OffPrismTranslator> s_offprismTranslator;
+    if (s_offprismTranslator) {
+        QCoreApplication::removeTranslator(s_offprismTranslator.get());
+        s_offprismTranslator.reset();
+    }
     if (d->m_appTranslator) {
         QCoreApplication::removeTranslator(d->m_appTranslator.get());
         d->m_appTranslator.reset();
@@ -526,6 +532,13 @@ bool TranslationsModel::selectLanguage(QString key) const
     } else {
         d->m_appTranslator.reset();
     }
+
+    // OffPrism strings are not in the downloaded translation files; installed last so it is queried first
+    s_offprismTranslator = std::make_unique<OffPrismTranslator>(langCode);
+    if (s_offprismTranslator->isEmpty() || !QCoreApplication::installTranslator(s_offprismTranslator.get())) {
+        s_offprismTranslator.reset();
+    }
+
     d->m_selectedLanguage = langCode;
     return successful;
 }

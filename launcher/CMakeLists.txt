@@ -447,6 +447,8 @@ set(TRANSLATIONS_SOURCES
     translations/TranslationsModel.cpp
     translations/POTranslator.h
     translations/POTranslator.cpp
+    translations/OffPrismTranslator.h
+    translations/OffPrismTranslator.cpp
 )
 
 set(TOOLS_SOURCES
