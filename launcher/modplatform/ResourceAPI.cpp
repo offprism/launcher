@@ -41,14 +41,18 @@ Task::Ptr ResourceAPI::getProjectVersions(const VersionSearchArgs& args,
         for (auto versionIter : arr) {
             auto obj = versionIter.toObject();
 
-            for (auto file : loadIndexedPackVersions(obj, args.resourceType)) {
-                if (!file.addonId.isValid()) {
-                    file.addonId = args.pack->addonId;
-                }
+            auto fileRes = loadIndexedPackVersion(obj, args.resourceType);
+            if (!fileRes) {
+                qWarning() << "Error while reading" << debugName() << "resource version:" << fileRes.error();
+                continue;
+            }
+            auto file = fileRes.value();
+            if (!file.addonId.isValid()) {
+                file.addonId = args.pack->addonId;
+            }
 
-                if (file.fileId.isValid() && !file.downloadUrl.isEmpty()) {  // Heuristic to check if the returned value is valid
-                    unsortedVersions.append(file);
-                }
+            if (file.fileId.isValid() && !file.downloadUrl.isEmpty()) {  // Heuristic to check if the returned value is valid
+                unsortedVersions.append(file);
             }
         }
 
@@ -188,14 +192,4 @@ std::pair<NetJob::Ptr, QList<ModPlatform::IndexedPack>*> ResourceAPI::searchProj
     netJob->addNetAction(action);
 
     return { netJob, response };
-}
-
-QList<ModPlatform::IndexedVersion> ResourceAPI::loadIndexedPackVersions(QJsonObject& obj, ModPlatform::ResourceType type) const
-{
-    auto fileRes = loadIndexedPackVersion(obj, type);
-    if (!fileRes) {
-        qWarning() << "Error while reading" << debugName() << "resource version:" << fileRes.error();
-        return {};
-    }
-    return { fileRes.value() };
 }

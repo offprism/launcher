@@ -84,11 +84,6 @@ const Entry s_russian[] = {
     { "QPlatformTheme", "Restore Defaults", "По умолчанию" },
     { "QShortcut", "Ctrl", "Ctrl" },
 
-    // GitHub resource source
-    { "QObject", "Sort by Stars", "По звёздам" },
-    { "QObject", "GitHub returned an invalid response: %1", "GitHub вернул некорректный ответ: %1" },
-    { "QObject", "GitHub returned an invalid response.", "GitHub вернул некорректный ответ." },
-
     // Themes
     { "QObject", "Glass (translucent)", "Glass (полупрозрачная)" },
     { "QObject", "Dark theme with semi-transparent windows.", "Тёмная тема с полупрозрачными окнами." },

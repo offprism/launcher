@@ -126,9 +126,6 @@ void EnsureMetadataTask::executeTask()
         case (ModPlatform::ResourceProvider::FLAME):
             versionTask = flameVersionsTask();
             break;
-        case (ModPlatform::ResourceProvider::GITHUB):
-            // GitHub resources are downloaded without metadata, there is nothing to look up
-            break;
     }
 
     auto invalidadeLeftover = [this] {
@@ -140,11 +137,6 @@ void EnsureMetadataTask::executeTask()
         emitSucceeded();
     };
 
-    if (!versionTask) {
-        invalidadeLeftover();
-        return;
-    }
-
     connect(versionTask.get(), &Task::finished, this, [this, invalidadeLeftover] {
         Task::Ptr projectTask;
 
@@ -154,8 +146,6 @@ void EnsureMetadataTask::executeTask()
                 break;
             case (ModPlatform::ResourceProvider::FLAME):
                 projectTask = flameProjectsTask();
-                break;
-            case (ModPlatform::ResourceProvider::GITHUB):
                 break;
         }
 

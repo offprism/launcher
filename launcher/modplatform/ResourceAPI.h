@@ -138,10 +138,6 @@ class ResourceAPI {
 
     virtual Result<ModPlatform::IndexedVersion> loadIndexedPackVersion(QJsonObject& obj, ModPlatform::ResourceType) const = 0;
 
-    // One API entry may describe several downloadable files (e.g. a GitHub release with a jar per mod loader).
-    // The default implementation returns the single version parsed by loadIndexedPackVersion.
-    virtual QList<ModPlatform::IndexedVersion> loadIndexedPackVersions(QJsonObject& obj, ModPlatform::ResourceType type) const;
-
     virtual std::pair<Task::Ptr, QByteArray*> getModCategories() const = 0;
 
     virtual QList<ModPlatform::Category> loadModCategories(const QByteArray& response) const = 0;
